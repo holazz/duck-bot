@@ -1,0 +1,87 @@
+{
+  "address": "pvwX4B67eRRjBGQ4jJUtiUJEFQbR4bvG6Wbe6mkCjtt",
+  "metadata": { "name": "freemint", "version": "0.1.0", "spec": "0.1.0", "description": "Created with Anchor" },
+  "instructions": [
+    {
+      "name": "mint_tokens",
+      "discriminator": [59, 132, 24, 246, 122, 39, 8, 243],
+      "accounts": [
+        { "name": "mint", "writable": true },
+        { "name": "config", "writable": true },
+        { "name": "user_ata", "writable": true },
+        {
+          "name": "user_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              { "kind": "const", "value": [117, 115, 101, 114, 95, 115, 116, 97, 116, 101] },
+              { "kind": "account", "path": "signer" }
+            ]
+          }
+        },
+        { "name": "signer", "writable": true, "signer": true },
+        {
+          "name": "mint_authority",
+          "pda": {
+            "seeds": [
+              { "kind": "const", "value": [109, 105, 110, 116, 95, 97, 117, 116, 104, 111, 114, 105, 116, 121] },
+              { "kind": "account", "path": "config" }
+            ]
+          }
+        },
+        { "name": "instructions_sysvar", "address": "Sysvar1nstructions1111111111111111111111111" },
+        { "name": "associated_token_program", "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL" },
+        { "name": "token_program", "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" },
+        { "name": "system_program", "address": "11111111111111111111111111111111" },
+        { "name": "rent", "address": "SysvarRent111111111111111111111111111111111" }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    { "name": "Config", "discriminator": [155, 12, 170, 224, 30, 250, 204, 130] },
+    { "name": "UserState", "discriminator": [72, 177, 85, 249, 76, 167, 186, 126] }
+  ],
+  "errors": [
+    { "code": 6000, "name": "AlreadyMinted", "msg": "User has already minted tokens." },
+    { "code": 6001, "name": "MintCapExceeded", "msg": "Mint cap exceeded." },
+    { "code": 6002, "name": "InvalidAssociatedTokenAccount", "msg": "Invalid associated token account." },
+    { "code": 6003, "name": "Unauthorized", "msg": "Unauthorized." },
+    { "code": 6004, "name": "NoTokensRemaining", "msg": "No tokens remaining to mint." },
+    {
+      "code": 6005,
+      "name": "MultipleMintsInTransactionNotAllowed",
+      "msg": "Multiple mints in a single transaction are not allowed."
+    },
+    { "code": 6006, "name": "AlreadyMintedInCurrentSlot", "msg": "User has already minted in the current slot." },
+    { "code": 6007, "name": "SlotMintLimitExceeded", "msg": "Slot mint limit exceeded." },
+    { "code": 6008, "name": "MintLimitExceeded", "msg": "User has already minted the maximum allowed." }
+  ],
+  "types": [
+    {
+      "name": "Config",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "mint", "type": "pubkey" },
+          { "name": "owner", "type": "pubkey" },
+          { "name": "total_mint_cap", "type": "u64" },
+          { "name": "per_mint_amount", "type": "u64" },
+          { "name": "total_minted", "type": "u64" },
+          { "name": "current_slot", "type": "u64" },
+          { "name": "mints_in_slot", "type": "u64" }
+        ]
+      }
+    },
+    {
+      "name": "UserState",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "last_mint_slot", "type": "u64" },
+          { "name": "mint_count", "type": "u8" }
+        ]
+      }
+    }
+  ]
+}
