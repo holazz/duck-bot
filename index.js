@@ -1,13 +1,15 @@
 import 'dotenv/config'
+import fsp from 'node:fs/promises'
 import base58 from 'bs58'
 import { Connection, PublicKey, Keypair, Transaction, ComputeBudgetProgram } from '@solana/web3.js'
 import { Program, AnchorProvider, web3, Wallet } from '@coral-xyz/anchor'
 import { getAssociatedTokenAddress, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token'
-import idl from './idl.json' assert { type: 'json' }
 
 const PROGRAM_ID = new PublicKey('pvwX4B67eRRjBGQ4jJUtiUJEFQbR4bvG6Wbe6mkCjtt')
 const MINT_ADDRESS = new PublicKey('4ALKS249vAS3WSCUxXtHJVZN753kZV6ucEQC41421Rka')
 const CONFIG_ADDRESS = new PublicKey('B4cAqfPKtzsqm5mxDk4JkbvPPJoKyXNMyzj5X8SMfdQn')
+
+const idl = JSON.parse(await fsp.readFile('./idl.json', 'utf-8'))
 
 async function mint(keypair) {
   const connection = new Connection(process.env.RPC_URL || 'https://cold-hanni-fast-mainnet.helius-rpc.com/', {
