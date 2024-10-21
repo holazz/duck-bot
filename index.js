@@ -1,5 +1,6 @@
 import 'dotenv/config'
 import fsp from 'node:fs/promises'
+import pLimit from 'p-limit'
 import base58 from 'bs58'
 import { Connection, PublicKey, Keypair, Transaction, ComputeBudgetProgram } from '@solana/web3.js'
 import { Program, AnchorProvider, web3, Wallet } from '@coral-xyz/anchor'
@@ -70,8 +71,11 @@ async function mint(keypair) {
 }
 
 async function run() {
-  const keypair = Keypair.fromSecretKey(base58.decode(process.env.PRIVATE_KEY))
-  await mint(keypair)
+  const limit = pLimit(10)
+  const privates = (await fsp.readFile('./privates.txt', 'utf-8')).split('\n').filter(Boolean)
+  const accounts = privates.map((p) => Keypair.fromSecretKey(base58.decode(p)))
+  const promises = accounts.map((account) => limit(() => mint(account)))
+  await Promise.all(promises)
 }
 
 while (true) {
